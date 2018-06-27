@@ -3,6 +3,7 @@ package com.bonnag.ukcointax.domain;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Calculated {
     private final Bounds bounds;
@@ -47,9 +48,11 @@ public class Calculated {
     @Override
     public String toString() {
         return "Calculated{" + "bounds=" + bounds +
-                ",\n valuedTrades=" + valuedTrades +
                 ",\n dailyAcquisitionsAndDisposals=" + dailyAcquisitionsAndDisposals +
-                ",\n identifications=" + identifications +
+                //",\n identifications=" + identifications +
+                //",\n valuedTrades=" + valuedTrades.stream().map(ValuedTrade::toString).collect(Collectors.joining("\n")) +
+                ",\n sameDays=" + identifications.getIdentifications().stream().filter(i -> i.getIdentificationRuleCode().equals(IdentificationRuleCode.SameDay)).count() +
+                ",\n bNbs=" + identifications.getIdentifications().stream().filter(i -> i.getIdentificationRuleCode().equals(IdentificationRuleCode.BedAndBreakfast)).count() +
                 ",\n taxYearSummaries=" + taxYearSummaries +
                 '}';
     }

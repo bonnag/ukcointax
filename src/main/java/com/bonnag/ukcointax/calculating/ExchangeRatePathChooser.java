@@ -1,4 +1,4 @@
-package com.bonnag.ukcointax.calculations;
+package com.bonnag.ukcointax.calculating;
 
 import com.bonnag.ukcointax.domain.Asset;
 import com.bonnag.ukcointax.domain.ExchangeRate;
@@ -25,9 +25,7 @@ public class ExchangeRatePathChooser {
                 graph.addVertex(asset);
             }
             DefaultEdge edge = graph.addEdge(assetPair.getBase(), assetPair.getQuoted());
-            long numFiatAssets = Arrays.stream(assetPair.asArray()).filter(a -> a.isFiat()).count();
-            // in case of a tie, favour fiat-fiat over fiat-crypto over crypto-crypto
-            double weight = 1.0 - numFiatAssets * 0.01;
+            double weight = score(assetPair.getBase()) * score(assetPair.getQuoted());
             graph.setEdgeWeight(edge, weight);
         }
         ShortestPathAlgorithm<Asset,DefaultEdge> shortestPathFinder = new DijkstraShortestPath<>(graph);
@@ -35,6 +33,45 @@ public class ExchangeRatePathChooser {
             graph.addVertex(Asset.Sterling);
         }
         allPathsFromSterling = shortestPathFinder.getPaths(Asset.Sterling);
+    }
+
+    // Get weighting of an asset (should be near 1.0, lower good, higher bad).
+    // We multiply the score of the two assets involved in the trade to decide
+    // which exchange rates to use when there is a choice.
+    // We choose the score so that we favour fiat-fiat over fiat-crypto over
+    // crypto-crypto, and within those categories, we want to favour sterling
+    // over others, and favour bitcoin over ether over others.
+    // However, we still want to favour a shorter-path - so e.g. fiat-crypto
+    // still beats fiat-fiat-fiat-fiat! (We assume paths are never more than
+    // a few steps).
+    // We also want to be deterministic across runs - running the program twice
+    // should give the same tax figures, so we add a little final tie-breaker
+    // quantity to the score.
+    public double score(Asset asset) {
+        return categoryScore(asset) + stabilityScore(asset);
+    }
+
+    public double categoryScore(Asset asset) {
+        if (asset.isSterling()) {
+            return 1.00;
+        } else if (asset.isFiat()) {
+            return 1.01;
+        } else if (asset.getAssetCode().equals("BTC")) {
+            return 1.02;
+        } else if (asset.getAssetCode().equals("ETH")) {
+            return 1.03;
+        } else {
+            return 1.04;
+        }
+    }
+
+    // Avoid non-determinism - same set of exchange rate pairs should
+    // always produce same paths regardless of ordering, so we fudge
+    // the weights a little.
+    public double stabilityScore(Asset asset) {
+        // Java's hashCode algo has been documented for Strings since 1.2 so hopefully won't change
+        double normalisedHashCode = Math.abs((double) asset.getAssetCode().hashCode() / (double) Integer.MIN_VALUE);
+        return 1e-6 * normalisedHashCode;
     }
 
     public List<Asset> chooseBestPathToSterlingFromAmong(Asset... assets) {
@@ -52,7 +89,7 @@ public class ExchangeRatePathChooser {
             throw new IllegalStateException("unable to find path to sterling from any of " +
                     Arrays.stream(assets).map(Asset::getAssetCode).collect(Collectors.joining()));
         }
-        List<Asset> assetPath = new ArrayList<Asset>(bestPath.getVertexList());
+        List<Asset> assetPath = new ArrayList<>(bestPath.getVertexList());
         Collections.reverse(assetPath);
         return assetPath;
     }

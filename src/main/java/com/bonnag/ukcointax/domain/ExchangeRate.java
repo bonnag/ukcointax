@@ -1,6 +1,6 @@
 package com.bonnag.ukcointax.domain;
 
-import com.bonnag.ukcointax.calculations.AssetPair;
+import com.bonnag.ukcointax.calculating.AssetPair;
 
 import java.time.Instant;
 import java.util.Objects;
@@ -34,6 +34,10 @@ public class ExchangeRate {
 
     public double getPrice() {
         return price;
+    }
+
+    public String getPriceAsString() {
+        return Double.toString(price);
     }
 
     public String getSourceCode() {

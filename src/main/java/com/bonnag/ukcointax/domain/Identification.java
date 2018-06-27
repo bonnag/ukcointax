@@ -8,4 +8,5 @@ public interface Identification {
     AssetAmount getAmount();
     AssetAmount getAllowableCostSterling();
     IdentificationRuleCode getIdentificationRuleCode();
+    AssetDay getEarliestAssetDay();
 }

@@ -1,4 +1,4 @@
-package com.bonnag.ukcointax.calculations;
+package com.bonnag.ukcointax.calculating;
 
 import com.bonnag.ukcointax.domain.*;
 
@@ -18,7 +18,7 @@ public class BedAndBreakfastIdentificationRule implements IdentificationRule {
         DayDisposal dayDisposal = optionalDayDisposal.get();
         for (LocalDate futureDay = assetDay.getDay().plusDays(1); !futureDay.isAfter(assetDay.getDay().plusDays(30)); futureDay = futureDay.plusDays(1)) {
             AssetAmount disposalRemaining = identifications.getAmountRemaining(dayDisposal);
-            if (disposalRemaining.isZero()) {
+            if (disposalRemaining.isEffectivelyZero()) {
                 return;
             }
             AssetDay futureAssetDay = new AssetDay(assetDay.getAsset(), futureDay);
@@ -28,7 +28,7 @@ public class BedAndBreakfastIdentificationRule implements IdentificationRule {
             }
             DayAcquisition futureDayAcquisition = optionalFutureDayAcquisition.get();
             AssetAmount futureDayAcquisitionRemaining = identifications.getAmountRemaining(futureDayAcquisition);
-            if (futureDayAcquisitionRemaining.isZero()) {
+            if (futureDayAcquisitionRemaining.isEffectivelyZero()) {
                 continue;
             }
             AssetAmount commonAmount = AssetAmount.min(disposalRemaining, futureDayAcquisitionRemaining);

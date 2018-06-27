@@ -1,47 +1,55 @@
-package com.bonnag.ukcointax.calculations;
+package com.bonnag.ukcointax.calculating;
 
 import com.bonnag.ukcointax.domain.*;
 
 import java.util.Optional;
 
-public class NonPoolIdentification implements Identification {
+public class PoolDisposalIdentification implements Identification {
     private final DayDisposal dayDisposal;
-    private final DayAcquisition dayAcquisition;
     private final AssetAmount amount;
+    private final AssetAmount sterlingAmount;
     private final IdentificationRuleCode identificationRuleCode;
 
-    public NonPoolIdentification(DayDisposal dayDisposal, DayAcquisition dayAcquisition, AssetAmount amount, IdentificationRuleCode identificationRuleCode) {
+    public PoolDisposalIdentification(DayDisposal dayDisposal, AssetAmount amount, AssetAmount sterlingAmount, IdentificationRuleCode identificationRuleCode) {
         this.dayDisposal = dayDisposal;
-        this.dayAcquisition = dayAcquisition;
         this.amount = amount;
+        this.sterlingAmount = sterlingAmount;
         this.identificationRuleCode = identificationRuleCode;
     }
 
+    @Override
     public Optional<DayDisposal> getDayDisposal() {
         return Optional.of(dayDisposal);
     }
 
+    @Override
     public Optional<DayAcquisition> getDayAcquisition() {
-        return Optional.of(dayAcquisition);
+        return Optional.empty();
     }
 
+    @Override
     public AssetAmount getAmount() {
         return amount;
     }
 
     @Override
     public AssetAmount getAllowableCostSterling() {
-        return dayAcquisition.getSterlingCost().multiplyThenDivide(amount, dayAcquisition.getBought());
+        return sterlingAmount;
     }
 
+    @Override
     public IdentificationRuleCode getIdentificationRuleCode() {
         return identificationRuleCode;
     }
 
     @Override
+    public AssetDay getEarliestAssetDay() {
+        return dayDisposal.getAssetDay();
+    }
+
+    @Override
     public String toString() {
-        return "NonPoolIdentification{" + "dayDisposal=" + dayDisposal +
-                ", dayAcquisition=" + dayAcquisition +
+        return "PoolDisposalIdentification{" + "dayDisposal=" + dayDisposal +
                 ", amount=" + amount +
                 ", allowableCostSterling=" + getAllowableCostSterling() +
                 ", identificationRuleCode=" + identificationRuleCode +

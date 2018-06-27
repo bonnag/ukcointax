@@ -21,7 +21,7 @@ public class Asset implements Comparable<Asset> {
 
     public Asset(String assetCode) {
         if (!assetCode.equals(assetCode.toUpperCase())) {
-            throw new IllegalArgumentException("asset codes must be upper-case");
+            //throw new IllegalArgumentException("asset codes must be upper-case");
         }
         this.assetCode = assetCode;
     }

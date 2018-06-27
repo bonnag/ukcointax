@@ -1,17 +1,17 @@
-package com.bonnag.ukcointax.calculations;
+package com.bonnag.ukcointax.calculating;
 
 import com.bonnag.ukcointax.domain.*;
 
 import java.util.Optional;
 
-public class PoolDisposalIdentification implements Identification {
-    private final DayDisposal dayDisposal;
+public class PoolAcquisitionIdentification implements Identification {
+    private final DayAcquisition dayAcquisition;
     private final AssetAmount amount;
     private final AssetAmount sterlingAmount;
     private final IdentificationRuleCode identificationRuleCode;
 
-    public PoolDisposalIdentification(DayDisposal dayDisposal, AssetAmount amount, AssetAmount sterlingAmount, IdentificationRuleCode identificationRuleCode) {
-        this.dayDisposal = dayDisposal;
+    public PoolAcquisitionIdentification(DayAcquisition dayAcquisition, AssetAmount amount, AssetAmount sterlingAmount, IdentificationRuleCode identificationRuleCode) {
+        this.dayAcquisition = dayAcquisition;
         this.amount = amount;
         this.sterlingAmount = sterlingAmount;
         this.identificationRuleCode = identificationRuleCode;
@@ -19,12 +19,12 @@ public class PoolDisposalIdentification implements Identification {
 
     @Override
     public Optional<DayDisposal> getDayDisposal() {
-        return Optional.of(dayDisposal);
+        return Optional.empty();
     }
 
     @Override
     public Optional<DayAcquisition> getDayAcquisition() {
-        return Optional.empty();
+        return Optional.of(dayAcquisition);
     }
 
     @Override
@@ -43,10 +43,15 @@ public class PoolDisposalIdentification implements Identification {
     }
 
     @Override
+    public AssetDay getEarliestAssetDay() {
+        return dayAcquisition.getAssetDay();
+    }
+
+    @Override
     public String toString() {
-        return "PoolDisposalIdentification{" + "dayDisposal=" + dayDisposal +
+        return "PoolAcquisitionIdentification{" + "dayAcquisition=" + dayAcquisition +
                 ", amount=" + amount +
-                ", allowableCostSterling=" + getAllowableCostSterling() +
+                ", aAllowableCostSterling=" + getAllowableCostSterling() +
                 ", identificationRuleCode=" + identificationRuleCode +
                 '}';
     }

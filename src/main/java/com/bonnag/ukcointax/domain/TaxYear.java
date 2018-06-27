@@ -9,7 +9,7 @@ public class TaxYear {
     private final String name;
 
     public TaxYear(String name) {
-        if (name.matches("^[1-2][0-9]{3}/[0-9]{2}$")) {
+        if (!name.matches("^[1-2][0-9]{3}/[0-9]{2}$")) {
             throw new IllegalArgumentException("expected name like 2016/17, not " + name);
         }
         this.startCalendarYear = Integer.parseInt(name.substring(0 ,4));

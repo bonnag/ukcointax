@@ -24,8 +24,16 @@ public class AssetAmount {
         return amount;
     }
 
+    public String getAmountAsString() {
+        return Double.toString(amount);
+    }
+
     public boolean isZero() {
         return amount == 0.0;
+    }
+
+    public boolean isEffectivelyZero() {
+        return Math.abs(amount) < 1e-12;
     }
 
     public AssetAmount add(AssetAmount other) {

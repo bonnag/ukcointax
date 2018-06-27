@@ -1,4 +1,4 @@
-package com.bonnag.ukcointax.calculations;
+package com.bonnag.ukcointax.calculating;
 
 import com.bonnag.ukcointax.domain.Asset;
 import com.bonnag.ukcointax.domain.AssetAmount;
@@ -23,6 +23,7 @@ public class HoldingPool {
         }
         AssetAmount sterlingCost = totalSterlingCost.multiplyThenDivide(amount, totalAmount);
         this.totalAmount = totalAmount.subtract(amount);
+        this.totalSterlingCost = totalSterlingCost.subtract(sterlingCost);
         return sterlingCost;
     }
 }

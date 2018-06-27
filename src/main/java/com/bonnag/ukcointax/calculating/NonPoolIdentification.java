@@ -1,52 +1,58 @@
-package com.bonnag.ukcointax.calculations;
+package com.bonnag.ukcointax.calculating;
 
 import com.bonnag.ukcointax.domain.*;
 
 import java.util.Optional;
 
-public class PoolAcquisitionIdentification implements Identification {
+public class NonPoolIdentification implements Identification {
+    private final DayDisposal dayDisposal;
     private final DayAcquisition dayAcquisition;
     private final AssetAmount amount;
-    private final AssetAmount sterlingAmount;
     private final IdentificationRuleCode identificationRuleCode;
 
-    public PoolAcquisitionIdentification(DayAcquisition dayAcquisition, AssetAmount amount, AssetAmount sterlingAmount, IdentificationRuleCode identificationRuleCode) {
+    public NonPoolIdentification(DayDisposal dayDisposal, DayAcquisition dayAcquisition, AssetAmount amount, IdentificationRuleCode identificationRuleCode) {
+        this.dayDisposal = dayDisposal;
         this.dayAcquisition = dayAcquisition;
         this.amount = amount;
-        this.sterlingAmount = sterlingAmount;
         this.identificationRuleCode = identificationRuleCode;
     }
 
-    @Override
     public Optional<DayDisposal> getDayDisposal() {
-        return Optional.empty();
+        return Optional.of(dayDisposal);
     }
 
-    @Override
     public Optional<DayAcquisition> getDayAcquisition() {
         return Optional.of(dayAcquisition);
     }
 
-    @Override
     public AssetAmount getAmount() {
         return amount;
     }
 
     @Override
     public AssetAmount getAllowableCostSterling() {
-        return sterlingAmount;
+        return dayAcquisition.getSterlingCost().multiplyThenDivide(amount, dayAcquisition.getBought());
     }
 
-    @Override
     public IdentificationRuleCode getIdentificationRuleCode() {
         return identificationRuleCode;
     }
 
     @Override
+    public AssetDay getEarliestAssetDay() {
+        if (dayAcquisition.getDay().isBefore(dayDisposal.getDay())) {
+            return dayAcquisition.getAssetDay();
+        } else {
+            return dayDisposal.getAssetDay();
+        }
+    }
+
+    @Override
     public String toString() {
-        return "PoolAcquisitionIdentification{" + "dayAcquisition=" + dayAcquisition +
+        return "NonPoolIdentification{" + "dayDisposal=" + dayDisposal +
+                ", dayAcquisition=" + dayAcquisition +
                 ", amount=" + amount +
-                ", aAllowableCostSterling=" + getAllowableCostSterling() +
+                ", allowableCostSterling=" + getAllowableCostSterling() +
                 ", identificationRuleCode=" + identificationRuleCode +
                 '}';
     }

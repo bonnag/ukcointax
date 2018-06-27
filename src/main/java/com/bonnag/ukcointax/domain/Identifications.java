@@ -3,6 +3,7 @@ package com.bonnag.ukcointax.domain;
 import java.util.*;
 import java.util.stream.Collectors;
 
+// TODO - don't really like the way this turned out
 public class Identifications {
     private final List<Identification> identifications;
     private final Map<AssetDay, AssetAmount> amountIdentifiedFromAcquisitionOn;
@@ -45,7 +46,17 @@ public class Identifications {
     }
 
     public List<Identification> getIdentifications() {
-        return identifications;
+        return identifications.stream().sorted(Comparator.comparing(i -> i.getEarliestAssetDay())).collect(Collectors.toList());
+    }
+
+    public List<IdentifiedDayDisposal> getIdentifiedDayDisposals() {
+        Map<AssetDay,List<Identification>> identificationsByAssetDay  =
+                identifications.stream()
+                        .filter(i -> i.getDayDisposal().isPresent())
+                        .collect(
+                                Collectors.groupingBy(i -> i.getDayDisposal().get().getAssetDay()));
+        return identificationsByAssetDay.values().stream().map(is -> new IdentifiedDayDisposal(is))
+                .sorted().collect(Collectors.toList());
     }
 
     public List<IdentifiedDayDisposal> getIdentifiedDayDisposalsDuring(TaxYear taxYear) {
@@ -54,7 +65,8 @@ public class Identifications {
                         .filter(i -> i.getDayDisposal().isPresent() && taxYear.contains(i.getDayDisposal().get().getDay()))
                         .collect(
                                 Collectors.groupingBy(i -> i.getDayDisposal().get().getAssetDay()));
-        return identificationsByAssetDay.values().stream().map(is -> new IdentifiedDayDisposal(is)).collect(Collectors.toList());
+        return identificationsByAssetDay.values().stream().map(is -> new IdentifiedDayDisposal(is))
+                .sorted().collect(Collectors.toList());
     }
 
     @Override

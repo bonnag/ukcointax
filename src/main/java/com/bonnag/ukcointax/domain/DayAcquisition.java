@@ -59,7 +59,7 @@ public class DayAcquisition {
         return "DayAcquisition{" + "day=" + day +
                 ", bought=" + bought +
                 ", sterlingCost=" + sterlingCost +
-                ", valuedTrades=" + valuedTrades +
+                //", valuedTrades=" + valuedTrades +
                 '}';
     }
 }

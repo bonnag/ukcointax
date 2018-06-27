@@ -1,4 +1,4 @@
-package com.bonnag.ukcointax.calculations;
+package com.bonnag.ukcointax.calculating;
 
 import com.bonnag.ukcointax.domain.Asset;
 
@@ -45,8 +45,6 @@ public class AssetPair {
 
     @Override
     public String toString() {
-        return "AssetPair{" + "base=" + base +
-                ", quoted=" + quoted +
-                '}';
+        return base.toString() + "/" + quoted.toString();
     }
 }

@@ -1,9 +1,11 @@
 package com.bonnag.ukcointax.domain;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.time.LocalDate;
 import java.util.Objects;
 
-public class AssetDay {
+public class AssetDay implements Comparable<AssetDay> {
     private final Asset asset;
     private final LocalDate day;
 
@@ -19,6 +21,8 @@ public class AssetDay {
     public LocalDate getDay() {
         return day;
     }
+
+
 
     @Override
     public boolean equals(Object o) {
@@ -39,5 +43,14 @@ public class AssetDay {
         return "AssetDay{" + "asset=" + asset +
                 ", day=" + day +
                 '}';
+    }
+
+    @Override
+    public int compareTo(@NotNull AssetDay other) {
+        int d;
+        d = asset.compareTo(other.asset);
+        if (d != 0) return d;
+        d = day.compareTo(other.day);
+        return d;
     }
 }

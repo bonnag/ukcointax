@@ -59,7 +59,7 @@ public class DayDisposal {
         return "DayDisposal{" + "day=" + day +
                 ", sold=" + sold +
                 ", sterlingProceeds=" + sterlingProceeds +
-                ", valuedTrades=" + valuedTrades +
+                //", valuedTrades=" + valuedTrades +
                 '}';
     }
 }

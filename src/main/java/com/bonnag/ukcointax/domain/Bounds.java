@@ -1,6 +1,6 @@
 package com.bonnag.ukcointax.domain;
 
-import com.bonnag.ukcointax.calculations.DayMapper;
+import com.bonnag.ukcointax.calculating.DayMapper;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -29,6 +29,7 @@ public class Bounds {
     }
 
     public List<Asset> getShareLikeAssets() {
+        //return Collections.singletonList(new Asset("ADX"));
         return assets.stream().filter(a -> a.isShareLike()).collect(Collectors.toList());
     }
 

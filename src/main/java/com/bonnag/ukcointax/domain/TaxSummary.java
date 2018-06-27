@@ -32,7 +32,7 @@ public class TaxSummary {
                 disposalProceeds.add(individualDisposalProceeds),
                 allowableCosts.add(individualAllowableCosts),
                 (isGain ? gainsBeforeLosses.add(individualDisposalProceeds.subtract(individualAllowableCosts)) : gainsBeforeLosses),
-                (isGain? losses : losses.add(individualAllowableCosts.subtract(individualDisposalProceeds))));
+                (isGain ? losses : losses.add(individualAllowableCosts.subtract(individualDisposalProceeds))));
     }
 
     public int getNumberOfDisposals() {

@@ -1,4 +1,4 @@
-package com.bonnag.ukcointax.calculations;
+package com.bonnag.ukcointax.calculating;
 
 import com.bonnag.ukcointax.domain.*;
 
@@ -29,7 +29,7 @@ public class Section104PoolIdentificationRule implements IdentificationRule {
 
     private void applyAcquisition(DayAcquisition dayAcquisition, HoldingPool holdingPool, Identifications identifications) {
         AssetAmount remaining = identifications.getAmountRemaining(dayAcquisition);
-        if (remaining.isZero()) {
+        if (remaining.isEffectivelyZero()) {
             return;
         }
         AssetAmount sterlingAmount = dayAcquisition.getSterlingCost().multiplyThenDivide(remaining, dayAcquisition.getBought());
@@ -39,7 +39,7 @@ public class Section104PoolIdentificationRule implements IdentificationRule {
 
     private void applyDisposal(DayDisposal dayDisposal, HoldingPool holdingPool, Identifications identifications) {
         AssetAmount remaining = identifications.getAmountRemaining(dayDisposal);
-        if (remaining.isZero()) {
+        if (remaining.isEffectivelyZero()) {
             return;
         }
         AssetAmount sterlingAmount = holdingPool.removeAndGetAllowableCost(remaining);

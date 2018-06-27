@@ -1,6 +1,6 @@
 package com.bonnag.ukcointax;
 
-import com.bonnag.ukcointax.calculations.Calculator;
+import com.bonnag.ukcointax.calculating.Calculator;
 import com.bonnag.ukcointax.domain.*;
 import org.junit.Assert;
 import org.junit.Test;
@@ -15,10 +15,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 
-/**
- * Unit test for simple App.
- */
-public class AppTest {
+public class CalculatorTest {
 
     @Test
     public void blockTaxUkExample() {

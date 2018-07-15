@@ -11,18 +11,21 @@ public class Calculated {
     private final DailyAcquisitionsAndDisposals dailyAcquisitionsAndDisposals;
     private final Identifications identifications;
     private final LinkedHashMap<TaxYear, TaxSummary> taxYearSummaries;
+    private final InferredBalancesHistory inferredBalancesHistory;
 
     public Calculated(
             Bounds bounds,
             List<ValuedTrade> valuedTrades,
             DailyAcquisitionsAndDisposals dailyAcquisitionsAndDisposals,
             Identifications identifications,
-            LinkedHashMap<TaxYear, TaxSummary> taxYearSummaries) {
+            LinkedHashMap<TaxYear, TaxSummary> taxYearSummaries,
+            InferredBalancesHistory inferredBalancesHistory) {
         this.bounds = bounds;
         this.valuedTrades = Collections.unmodifiableList(valuedTrades);
         this.dailyAcquisitionsAndDisposals = dailyAcquisitionsAndDisposals;
         this.identifications = identifications;
         this.taxYearSummaries = taxYearSummaries;
+        this.inferredBalancesHistory = inferredBalancesHistory;
     }
 
     public Bounds getBounds() {
@@ -45,15 +48,20 @@ public class Calculated {
         return taxYearSummaries;
     }
 
+    public InferredBalancesHistory getInferredBalancesHistory() {
+        return inferredBalancesHistory;
+    }
+
     @Override
     public String toString() {
         return "Calculated{" + "bounds=" + bounds +
                 ",\n dailyAcquisitionsAndDisposals=" + dailyAcquisitionsAndDisposals +
-                //",\n identifications=" + identifications +
-                //",\n valuedTrades=" + valuedTrades.stream().map(ValuedTrade::toString).collect(Collectors.joining("\n")) +
+                ",\n identifications=" + identifications +
+                ",\n valuedTrades=" + valuedTrades.stream().map(ValuedTrade::toString).collect(Collectors.joining("\n")) +
                 ",\n sameDays=" + identifications.getIdentifications().stream().filter(i -> i.getIdentificationRuleCode().equals(IdentificationRuleCode.SameDay)).count() +
                 ",\n bNbs=" + identifications.getIdentifications().stream().filter(i -> i.getIdentificationRuleCode().equals(IdentificationRuleCode.BedAndBreakfast)).count() +
                 ",\n taxYearSummaries=" + taxYearSummaries +
+                ",\n inferredBalancesHistory=" + inferredBalancesHistory +
                 '}';
     }
 }

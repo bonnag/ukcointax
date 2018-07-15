@@ -64,6 +64,10 @@ public class TaxYear {
         return name;
     }
 
+    public String toSafeString() {
+        return name.replace('/', '-');
+    }
+
     public static TaxYear forDay(LocalDate day) {
         LocalDate taxYearStart = LocalDate.of(day.getYear(), Month.APRIL, 6);
         int startCalendarYear = day.isBefore(taxYearStart) ? day.getYear() - 1 : day.getYear();

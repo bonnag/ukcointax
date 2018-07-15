@@ -87,7 +87,7 @@ public class ExchangeRatePathChooser {
         }
         if (bestPath == null) {
             throw new IllegalStateException("unable to find path to sterling from any of " +
-                    Arrays.stream(assets).map(Asset::getAssetCode).collect(Collectors.joining()));
+                    Arrays.stream(assets).map(Asset::getAssetCode).collect(Collectors.joining(",")));
         }
         List<Asset> assetPath = new ArrayList<>(bestPath.getVertexList());
         Collections.reverse(assetPath);

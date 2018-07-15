@@ -36,6 +36,10 @@ public class AssetAmount {
         return Math.abs(amount) < 1e-12;
     }
 
+    public boolean isProperlyNegative() {
+        return amount < -1e-11;
+    }
+
     public AssetAmount add(AssetAmount other) {
         assetSameAsset(this, other);
         return new AssetAmount(asset, amount + other.amount);
@@ -54,6 +58,10 @@ public class AssetAmount {
     public AssetAmount multiplyThenDivide(AssetAmount numerator, AssetAmount denominator) {
         assetSameAsset(numerator, denominator);
         return new AssetAmount(asset, amount * numerator.amount / denominator.amount);
+    }
+
+    public AssetAmount negate() {
+        return new AssetAmount(asset, 0.0 - amount);
     }
 
     @Override

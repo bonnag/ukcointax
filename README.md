@@ -43,7 +43,7 @@ Column | Meaning | Example
 "Venue" | Name of the exchange on which the trade took place | Binance
 "TradeId" | Unique identifier for the trade on this exchange | 857fjhru-358454gf-1235484
 
-The names of the CSV files aren't important - you can have many CSV files of trades.
+The names of the CSV files aren't important - your input directory can have many CSV files of trades.
 
 TODO - currently ukcointax doesn't have any special support for trading fees - you'll probably want to adjust the amount base or amount quoted to take into account the actual amount paid / received after fees are taken into account.
 
@@ -80,7 +80,7 @@ TODO - Currently it's not very user-friendly ...
 
 First, you'll need to install a Java run-time - e.g. from https://www.oracle.com/technetwork/java/javase/downloads/index.html .
 
-Then, you'll need to download the ukcointax.jar.
+Then, you'll need to download the ukcointax.jar from https://github.com/bonnag/ukcointax/releases/download/v0.2/ukcointax-0.2.jar .
 
 You'll need to tell ukcointax.jar which directory your records are in, plus which directory you want it to write reports to.
 

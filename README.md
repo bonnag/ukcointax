@@ -33,6 +33,7 @@ ukcointax needs records of your trades in a standard format.
 The ukcointax native trade format is a CSV file with the following columns:
 
 Column | Meaning | Example
+---- | ---- | ----
 "TradedAt" | Time the trade occurred. Must be in UTC in ISO-8601 format to millisecond precision. | 2017-12-30T08:01:00.000Z
 "TradeSide" | Did you buy or sell the base asset? | Buy
 "AssetBase" | The base asset | BTC
@@ -55,6 +56,7 @@ For example, if you traded BTC and USD on the 12th Feb, you probably want to giv
 The ukcointax native exchange rate format is a CSV file with the following columns:
 
 Column | Meaning | Example
+---- | ---- | ----
 "QuotedAt" | Time the exchange rate was observed. Must be in UTC in ISO-8601 format to millisecond precision. | 2017-12-30T08:01:00.000Z
 "AssetBase" | The base asset | GBP
 "AssetQuoted" | USD

@@ -40,14 +40,16 @@ public class Calculator {
                     Collectors.collectingAndThen(Collectors.toList(), TaxSummary::fromIdentifiedDayDisposals));
             taxYearSummaries.put(taxYear, taxSummary);
         }
-        TaxSummary overallTaxSummary = taxYearSummaries.get(new TaxYear("2017/18"));
-        System.out.println("Overall 2017/18:");
+        /*
+        TaxSummary overallTaxSummary = taxYearSummaries.get(new TaxYear("2018/19"));
+        System.out.println("Overall " + overallTaxSummary + ":");
         System.out.println("totalNumDisposals=" + overallTaxSummary.getNumberOfDisposals());
         System.out.println("totalProceeds=" + overallTaxSummary.getDisposalProceeds().getAmountAsString());
         System.out.println("totalCosts=" + overallTaxSummary.getAllowableCosts().getAmountAsString());
         System.out.println("totalGains=" + overallTaxSummary.getGainsBeforeLosses().getAmountAsString());
         System.out.println("totalLosses=" + overallTaxSummary.getLosses().getAmountAsString());
         System.out.println("netGains=" + (overallTaxSummary.getGainsBeforeLosses().subtract(overallTaxSummary.getLosses())).getAmountAsString());
+        */
         return new Calculated(bounds, valuedTrades, dailyAcquisitionsAndDisposals, identifications, taxYearSummaries, inferredBalancesHistory);
     }
 }

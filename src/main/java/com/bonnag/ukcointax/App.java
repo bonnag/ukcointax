@@ -8,6 +8,7 @@ import com.bonnag.ukcointax.loading.Loader;
 import com.bonnag.ukcointax.presenting.ReportsWriter;
 import com.google.devtools.common.options.OptionsParser;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Collections;
@@ -24,6 +25,11 @@ public class App
             printUsage(parser);
             return;
         }
+        File outputDir = new File(options.output);
+        if (outputDir.exists()) {
+            throw new IOException("directory " + options.output + " already exists, refusing to overwrite");
+        }
+        outputDir.mkdirs();
         Loaded loaded = new Loader().load(Paths.get(options.input));
         List<Trade> validTrades = loaded.getTrades().stream().filter(App::isValidTrade).collect(Collectors.toList());
         Calculated calculated = new Calculator().calculate(validTrades, loaded.getExchangeRates());

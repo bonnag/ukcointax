@@ -11,9 +11,9 @@ Calculate UK Capital Gains Tax on Cryptocurrency trades
 * ukcointax assumes you have given it a complete and accurate record of all your trades for all assets and all exchanges, including _all_ trades prior to the first tax year you are interested in, and all trades for at least the next 30 days after the end of the last tax year you are interested in. Missing trades can dramatically alter the reported figures due to identification rules.
 * ukcointax assumes that all the cryptocurrencies traded are to be treated essentially like company shares. This may not be appropriate for stablecoins like Dai, and is not appropriate for non-fungible assets like cryptokitties.
 * ukcointax does not have any support for:
-** margin trading;
-** airdrops or chain splits / forks;
-** trading fees that are in a currency that is not part of the trade - e.g. fees paid in AURA tokens on a OMG/ETH trade.
+  * margin trading;
+  * airdrops or chain splits / forks;
+  * trading fees that are in a currency that is not part of the trade - e.g. fees paid in AURA tokens on a OMG/ETH trade.
 * ukcointax does not endorse any products or websites mentioned on these web pages. ukcointax advises you to do your own research and consult a tax professional.
 
 ## How to use ukcointax
@@ -21,33 +21,117 @@ Calculate UK Capital Gains Tax on Cryptocurrency trades
 Three basic steps:
 
 1. Prepare records of your trades, either from your trading software, or by downloading from exchanges, perhaps with tools like https://cointracking.info/ or https://bitcoin.tax/.
-2. Zip up your trades and upload them to the ukcointax cloud service. You will receive back a tax report. Or use the offline ukcointax app to analyse your trades and generate the report entirely on your computer.
+2. Run the offline ukcointax app on your records to analyse your trades and generate the report entirely on your computer.
 3. Read the report.
 
 ## Preparing records
 
-TODO - explain trade formats supported
-TODO - explain why need exchange rates
-TODO - explain exchange rate formats supported
-TODO - give example input
+### Trade Format ###
+
+ukcointax needs records of your trades in a standard format.
+
+The ukcointax native trade format is a CSV file with the following columns:
+
+Column | Meaning | Example
+"TradedAt" | Time the trade occurred. Must be in UTC in ISO-8601 format to millisecond precision. | 2017-12-30T08:01:00.000Z
+"TradeSide" | Did you buy or sell the base asset? | Buy
+"AssetBase" | The base asset | BTC
+"AmountBase" | The amount of the base asset bought or sold | 1.00
+"AssetQuoted" | The quoted asset (sometimes called counter currency - the price is quoted in this) | USD
+"AmountQuoted" | The amount of the quoted asset bought or sold | 1.00
+"Venue" | Name of the exchange on which the trade took place | Binance
+"TradeId" | Unique identifier for the trade on this exchange | 857fjhru-358454gf-1235484
+
+The names of the CSV files aren't important - you can have many CSV files of trades.
+
+TODO - currently ukcointax doesn't have any special support for trading fees - you'll probably want to adjust the amount base or amount quoted to take into account the actual amount paid / received after fees are taken into account.
+
+### Exchange Rate Format ###
+
+Unless all your trades involved GBP, ukcointax will need historic exchange rates to estimate the value of the assets bought or sold.
+
+For example, if you traded BTC and USD on the 12th Feb, you probably want to give ukcointax a USD/GBP exchange rate for that date.
+
+The ukcointax native exchange rate format is a CSV file with the following columns:
+
+Column | Meaning | Example
+"QuotedAt" | Time the exchange rate was observed. Must be in UTC in ISO-8601 format to millisecond precision. | 2017-12-30T08:01:00.000Z
+"AssetBase" | The base asset | GBP
+"AssetQuoted" | USD
+"Price" | How much is 1.0 of the base asset worth in the quoted asset? | 1.30
+
+ukcointax will use the most up-to-date exchange rate you give it before the trade date - so if you gave it a USD/GBP exchange rate for the 10th Feb, it would use that for your trade on the 12th Feb.
+
+ukcointax can triangulate across currencies to get a GBP value if needed - for example, if you have a BTC/ETH trade, and you have ETH/EUR and EUR/GBP exchange rates, it can use those rates to estimate the value of the ETH traded in GBP.
 
 ## Generating a Report
 
-### Cloud Service
-Once you've prepared your trade records, Zip them up into a zip file and upload them using the page at TODO. You will receive a download link to the ukcointax report for your trades. The report will be a zip file containing CSV files.
+Once you've prepared your trade records and exchange rates, run the ukcointax app to get your reports.
 
-The uploaded file and report will be deleted after one hour - ukcointax promises not to keep them or share them. The download link is publicly accessible during the one hour of existence but the link should be un-guessable to others.
+### Cloud ###
 
-### Offline App
-The offline app is currently only recommended for software developers.
+TODO - ukcointax cloud service
 
-Usage:
-java -jar ukcointax.jar -i inputDir -o outputDir
+### Offline Java App ###
 
-e.g.
-java -jar ukcointax.jar -i C:/Users/Me/Documents/trades -o C:/Users/Me/Documents/taxreport
+TODO - Currently it's not very user-friendly ...
 
-By default ukcointax in offline mode will not connect to the internet. You can however tell it to retrieve additional updated exchange rates from ukcointax servers by adding --download-rates to the command-line.
+First, you'll need to install a Java run-time - e.g. from https://www.oracle.com/technetwork/java/javase/downloads/index.html .
+
+Then, you'll need to download the ukcointax.jar.
+
+You'll need to tell ukcointax.jar which directory your records are in, plus which directory you want it to write reports to.
+
+It's a command-line app, so on Windows you'll need to hit start, then type Command Prompt.
+
+Command-line Usage:
+```
+java -jar Downloads/ukcointax.jar -i inputDir -o outputDir
+```
+
+For example, if you've put your trades in C:/Users/Me/Documents/trades, then run:
+
+```
+java -jar Downloads/ukcointax.jar -i Documents/trades -o Documents/taxreport1
+```
+
+ukcointax will create the output directory and place the report csv files there.
+
+## Common Problems
+
+```
+'java' is not recognized as an internal or external command
+```
+
+Did you install java? Is it in your PATH?
+
+```
+Error: Could not find or load main class ukcointax-0.2.jar
+```
+
+Did you forget the -jar bit?
+
+```
+Error: Unable to access jarfile ukcointax-0.2.jar
+```
+
+Are you running it where you downloaded it?
+
+```
+Exception in thread "main" java.io.IOException: directory Foo already exists, refusing to overwrite
+```
+
+To avoid accidents or confusion, it insists on creating a new output directory each time.
+
+```
+Exception in thread "main" java.lang.IllegalStateException: balance went negative at BalanceSnapshot{snapshotAt=2017-12-28T12:00:00Z, assetAmount=BTC -0.25}
+```
+
+This is a common and awkward problem. ukcointax computes running balances and has spotted that you appear to be spending assets it doesn't know you have.
+
+ukcointax allows the GBP balance to go negative, but complains if any others do.
+
+If the problem is a non-GBP fiat currency (say EUR), you could probably work around it by add a opening-positions.csv file containing an initial trade to represent buying your starting EUR - fiat-fiat trades are not reported by ukcointax.
 
 ## Reading the Report
 
@@ -68,6 +152,7 @@ TODO - Example Report
 
 # How it works
 
+TODO - things to cover ...
 * Sanity checking
 * Inferred balances
 * Appraising Trade Values

@@ -59,7 +59,7 @@ Column | Meaning | Example
 ---- | ---- | ----
 "QuotedAt" | Time the exchange rate was observed. Must be in UTC in ISO-8601 format to millisecond precision. | 2017-12-30T08:01:00.000Z
 "AssetBase" | The base asset | GBP
-"AssetQuoted" | USD
+"AssetQuoted" | The quoted (or counter) asset | USD
 "Price" | How much is 1.0 of the base asset worth in the quoted asset? | 1.30
 
 ukcointax will use the most up-to-date exchange rate you give it before the trade date - so if you gave it a USD/GBP exchange rate for the 10th Feb, it would use that for your trade on the 12th Feb.
